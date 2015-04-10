@@ -36,11 +36,12 @@ namespace LimeJelly.Core
         ICurve CurveAtIteration(int iter);
 
         /// <summary>
-        ///     Simplifies the current sequence of points to form a new curve.
+        ///     Simplifies the current sequence of points to form a new curve
+        ///     or does nothing if there are no further simplifications that can be made.
         /// </summary>
         /// <returns>
-        ///     The newly generated sequence of points.
+        ///     true if a new simplification was generated; false otherwise
         /// </returns>
-        ICurve Simplify();
+        bool Simplify();
     }
 }
