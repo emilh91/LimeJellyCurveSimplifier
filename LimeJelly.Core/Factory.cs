@@ -33,12 +33,12 @@ namespace LimeJelly.Core
 
         public static ICurveSimplifier DefaultSimplifier(ICurve curve)
         {
-            throw new NotImplementedException();
+            return new DefaultCurveSimplifier(curve);
         }
 
         public static ICurveSimplifier MemoizedSimplifier(ICurve curve)
         {
-            throw new NotImplementedException();
+            return new MemoizedCurveSimplifier(curve);
         }
     }
 }
