@@ -1,9 +1,20 @@
-﻿namespace LimeJelly.Driver
+﻿using System;
+
+namespace LimeJelly.Driver
 {
-    class Program
+    static class Program
     {
-        static void Main(string[] args)
+#if NETFX_CORE
+        [MTAThread]
+#else
+        [STAThread]
+#endif
+        static void Main()
         {
+            using (var app = new Game1())
+            {
+                app.Run();
+            }
         }
     }
 }
