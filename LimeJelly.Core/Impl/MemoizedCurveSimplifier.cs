@@ -4,29 +4,32 @@ using System.Linq;
 
 namespace LimeJelly.Core.Impl
 {
-    class MemoizedCurveSimplifier : ICurveSimplifier
+    abstract class MemoizedCurveSimplifier : ICurveSimplifier
     {
-        private IList<ICurve> _simplifications;
-
-        public ICurve InitialCurve { get { return _simplifications[0]; } }
-
-        public int NumIterations { get { return _simplifications.Count - 1; } }
-
-        public ICurve CurrentIteration { get { return _simplifications.Last(); } }
+        private IDictionary<double, ICurve> _simplifications;
 
         internal MemoizedCurveSimplifier(ICurve curve)
         {
-            _simplifications = new List<ICurve> {curve};
+            _simplifications = new Dictionary<double, ICurve> { { 0, curve } };
         }
 
-        public ICurve CurveAtIteration(int iter)
+        public ICurve InitialCurve
         {
-            return _simplifications[iter];
+            get { return _simplifications[0]; }
         }
 
-        public bool Simplify()
+        public ICurve Simplify(double epsilon)
         {
-            throw new NotImplementedException();
+            ICurve result;
+            if (_simplifications.TryGetValue(epsilon, out result))
+                return result;
+
+            result = SimplifyImpl(_simplifications[0], epsilon);
+            _simplifications.Add(epsilon, result);
+            return result;
+            
         }
+
+        protected abstract ICurve SimplifyImpl(ICurve curve, double epsilon);
     }
 }

@@ -38,8 +38,8 @@
     <Compile Include="ICurveSimplifier.cs" />
     <Compile Include="Impl\CurveImpl.cs" />
     <Compile Include="Factory.cs" />
-    <Compile Include="Impl\DefaultCurveSimplifier.cs" />
     <Compile Include="Impl\MemoizedCurveSimplifier.cs" />
+    <Compile Include="Impl\RamerDouglasPeuckerSimplifier.cs" />
     <Compile Include="IPoint.cs" />
     <Compile Include="Impl\Point2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
