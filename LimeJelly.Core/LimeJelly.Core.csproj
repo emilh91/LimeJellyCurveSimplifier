@@ -34,6 +34,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PointExtensions.cs" />
     <Compile Include="ICurve.cs" />
     <Compile Include="ICurveSimplifier.cs" />
     <Compile Include="Impl\CurveImpl.cs" />
