@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LimeJelly.Driver
+namespace LimeJelly.CurveSimplifier
 {
     static class Program
     {

@@ -5,7 +5,7 @@ using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
 
-namespace LimeJelly.Driver
+namespace LimeJelly.CurveSimplifier
 {
     /// <summary>
     /// This is the main type for your game

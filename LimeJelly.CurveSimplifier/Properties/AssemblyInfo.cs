@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LimeJelly.Core")]
+[assembly: AssemblyTitle("LimeJelly.CurveSimplifier")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LimeJelly.Core")]
+[assembly: AssemblyProduct("LimeJelly.CurveSimplifier")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("db10f9d8-c29e-481a-ae6f-b143a4a8bbb9")]
+[assembly: Guid("35c56eec-af96-4d95-a6a2-3b9d9c8eacf3")]
 
 // Version information for an assembly consists of the following four values:
 //

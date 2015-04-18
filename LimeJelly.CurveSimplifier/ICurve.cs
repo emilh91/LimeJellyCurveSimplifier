@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LimeJelly.Core
+namespace LimeJelly.CurveSimplifier
 {
     public interface ICurve
     {

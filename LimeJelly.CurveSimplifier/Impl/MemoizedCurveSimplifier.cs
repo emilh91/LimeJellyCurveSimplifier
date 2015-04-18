@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
-namespace LimeJelly.Core.Impl
+namespace LimeJelly.CurveSimplifier.Impl
 {
     abstract class MemoizedCurveSimplifier : ICurveSimplifier
     {
-        private IDictionary<double, ICurve> _simplifications;
+        private readonly IDictionary<double, ICurve> _simplifications;
 
         internal MemoizedCurveSimplifier(ICurve curve)
         {

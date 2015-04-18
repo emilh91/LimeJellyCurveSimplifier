@@ -1,4 +1,4 @@
-﻿namespace LimeJelly.Core
+﻿namespace LimeJelly.CurveSimplifier
 {
     public interface IPoint
     {

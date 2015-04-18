@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LimeJelly.Core.Impl;
+using LimeJelly.CurveSimplifier.Impl;
 
-namespace LimeJelly.Core
+namespace LimeJelly.CurveSimplifier
 {
     public static class Factory
     {

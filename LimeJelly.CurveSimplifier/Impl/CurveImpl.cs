@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace LimeJelly.Core.Impl
+namespace LimeJelly.CurveSimplifier.Impl
 {
     class CurveImpl : ICurve
     {

@@ -1,4 +1,4 @@
-﻿namespace LimeJelly.Core.Impl
+﻿namespace LimeJelly.CurveSimplifier.Impl
 {
     class Point2D : IPoint
     {

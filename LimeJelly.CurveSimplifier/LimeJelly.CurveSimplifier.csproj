@@ -7,8 +7,8 @@
     <ProjectGuid>{52ABB7F6-8685-4DFA-8D2C-1270EC4C79AC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LimeJelly.Driver</RootNamespace>
-    <AssemblyName>LimeJelly.Driver</AssemblyName>
+    <RootNamespace>LimeJelly.CurveSimplifier</RootNamespace>
+    <AssemblyName>LimeJelly.CurveSimplifier</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>7ec4c83c</NuGetPackageImportStamp>
@@ -56,11 +56,18 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Factory.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="ICurve.cs" />
+    <Compile Include="ICurveSimplifier.cs" />
+    <Compile Include="Impl\CurveImpl.cs" />
+    <Compile Include="Impl\MemoizedCurveSimplifier.cs" />
+    <Compile Include="Impl\Point2D.cs" />
+    <Compile Include="Impl\RamerDouglasPeuckerSimplifier.cs" />
+    <Compile Include="IPoint.cs" />
+    <Compile Include="PointExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
