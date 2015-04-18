@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SharpDX;
 
 namespace LimeJelly.CurveSimplifier.Impl
 {
@@ -12,7 +13,7 @@ namespace LimeJelly.CurveSimplifier.Impl
             return new CurveImpl(SimplifyImpl(curve.Points, epsilon));
         }
 
-        private IEnumerable<IPoint> SimplifyImpl(IEnumerable<IPoint> region, double epsilon)
+        private IEnumerable<Vector3> SimplifyImpl(IEnumerable<Vector3> region, double epsilon)
         {
             var points = region.ToList();
             if (points.Count < 2)
