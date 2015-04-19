@@ -58,7 +58,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factory.cs" />
+    <Compile Include="InputFactory.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Curve.cs" />
     <Compile Include="Simplifier\ICurveSimplifier.cs" />

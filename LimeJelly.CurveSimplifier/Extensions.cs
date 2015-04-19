@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SharpDX;
 
 namespace LimeJelly.CurveSimplifier
@@ -22,6 +23,11 @@ namespace LimeJelly.CurveSimplifier
             var xLength = end.X - start.X;
             return Math.Abs((yLength * point.X) - (xLength * point.Y) + (end.X * start.Y) - (end.Y * start.X))
                 / lineLength;
+        }
+
+        public static Curve ToCurve(this IEnumerable<Vector3> source)
+        {
+            return new Curve(source);
         }
     }
 }

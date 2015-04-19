@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LimeJelly.CurveSimplifier.Simplifier;
 using SharpDX;
 
 namespace LimeJelly.CurveSimplifier
 {
-    public static class Factory
+    public static class InputFactory
     {
         public static IEnumerable<Vector3> PointsFromFile(string filePath, char delimiter = ',')
         {
@@ -25,21 +24,6 @@ namespace LimeJelly.CurveSimplifier
                 var y = rand.NextFloat(0, yMax);
                 yield return new Vector3(x, y, 0);
             }
-        }
-
-        public static Curve ToCurve(this IEnumerable<Vector3> source)
-        {
-            return new Curve(source);
-        }
-
-        public static ICurveSimplifier DefaultSimplifier(Curve curve)
-        {
-            return new RamerDouglasPeuckerSimplifier(curve);
-        }
-
-        public static ICurveSimplifier MemoizedSimplifier(Curve curve)
-        {
-            return new RamerDouglasPeuckerSimplifier(curve);
         }
     }
 }
