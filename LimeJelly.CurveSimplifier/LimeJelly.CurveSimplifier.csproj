@@ -61,6 +61,8 @@
     <Compile Include="InputFactory.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Curve.cs" />
+    <Compile Include="State\CurveDrawerScreenState.cs" />
+    <Compile Include="State\ScreenState.cs" />
     <Compile Include="Simplifier\ICurveSimplifier.cs" />
     <Compile Include="Simplifier\MemoizedCurveSimplifier.cs" />
     <Compile Include="Simplifier\RamerDouglasPeuckerSimplifier.cs" />

@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
+using LimeJelly.CurveSimplifier.State;
 using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
@@ -15,24 +14,21 @@ namespace LimeJelly.CurveSimplifier
         private const int Width = 800;
         private const int Height = 600;
 
-        // Boilerplate properties
+        private GraphicsDeviceManager GraphicsDeviceManager { get; set; }
         private KeyboardManager KeyboardManager { get; set; }
         private MouseManager MouseManager { get; set; }
+        private SpriteBatch SpriteBatch { get; set; }
         private PrimitiveBatch<VertexPositionColor> PrimitiveBatch { get; set; }
         private Effect Effect { get; set; }
-
-        // Actually useful properties
-        private KeyboardState Keyboard { get { return KeyboardManager.GetState(); } }
-        private MouseState Mouse { get { return MouseManager.GetState(); } }
-        private List<VertexPositionColor> Vertices { get; set; }
+        private ScreenState CurrentScreenState { get; set; }
 
         public Game1()
         {
-            new GraphicsDeviceManager(this);
-            Vertices = new List<VertexPositionColor>();
-            KeyboardManager = new KeyboardManager(this);
-            MouseManager = new MouseManager(this);
-            IsMouseVisible = true;
+            GraphicsDeviceManager = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = Width,
+                PreferredBackBufferHeight = Height
+            };
         }
 
         /// <summary>
@@ -44,7 +40,12 @@ namespace LimeJelly.CurveSimplifier
         protected override void Initialize()
         {
             Window.Title = "LimeJelly Curve Simplifier";
+            IsMouseVisible = true;
 
+            KeyboardManager = new KeyboardManager(this);
+            MouseManager = new MouseManager(this);
+
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
             PrimitiveBatch = new PrimitiveBatch<VertexPositionColor>(GraphicsDevice);
 
             Effect = new BasicEffect(GraphicsDevice)
@@ -52,6 +53,8 @@ namespace LimeJelly.CurveSimplifier
                 VertexColorEnabled = true,
                 Projection = Matrix.OrthoOffCenterRH(0, Width, Height, 0, 0, 1)
             };
+
+            CurrentScreenState = new CurveDrawerScreenState();
 
             base.Initialize();
         }
@@ -63,33 +66,20 @@ namespace LimeJelly.CurveSimplifier
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.IsKeyDown(Keys.Escape))
+            if (ShouldChangeState())
+            {
+                CurrentScreenState = CurrentScreenState.NextState;
+            }
+
+            if (CurrentScreenState == null)
             {
                 Exit();
             }
-
-            if (Keyboard.IsKeyPressed(Keys.R))
+            else
             {
-                Vertices.Clear();
-            }
-
-            // For undoing
-            if (Keyboard.IsKeyPressed(Keys.Z))
-            {
-                if (Vertices.Any())
-                {
-                    Vertices.RemoveAt(Vertices.Count - 1);
-                }
-            }
-
-            if (Mouse.LeftButton.Down)
-            {
-                var vec3 = new Vector3(Mouse.X * Width, Mouse.Y * Height, 0);
-                var vpc = new VertexPositionColor(vec3, Color.Black);
-                if (Vertices.Count == 0 || Vertices.Last() != vpc)
-                {
-                    Vertices.Add(vpc);
-                }
+                var keyboard = KeyboardManager.GetState();
+                var mouse = MouseManager.GetState();
+                CurrentScreenState.Update(gameTime, keyboard, mouse);
             }
 
             base.Update(gameTime);
@@ -101,25 +91,27 @@ namespace LimeJelly.CurveSimplifier
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(CurrentScreenState.ClearColor);
 
             foreach (var pass in Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
             }
 
+            SpriteBatch.Begin();
+            CurrentScreenState.Draw(gameTime, SpriteBatch);
+            SpriteBatch.End();
+
             PrimitiveBatch.Begin();
-            if (Vertices.Count == 1)
-            {
-                PrimitiveBatch.Draw(PrimitiveType.PointList, Vertices.ToArray());
-            }
-            else if (Vertices.Count > 1)
-            {
-                PrimitiveBatch.Draw(PrimitiveType.LineStrip, Vertices.ToArray());
-            }
+            CurrentScreenState.Draw(gameTime, PrimitiveBatch);
             PrimitiveBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private bool ShouldChangeState()
+        {
+            return CurrentScreenState != null && CurrentScreenState.ShouldChangeState;
         }
     }
 }
