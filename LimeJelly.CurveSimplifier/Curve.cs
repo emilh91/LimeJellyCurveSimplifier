@@ -2,13 +2,13 @@
 using System.Linq;
 using SharpDX;
 
-namespace LimeJelly.CurveSimplifier.Impl
+namespace LimeJelly.CurveSimplifier
 {
-    class CurveImpl : ICurve
+    public class Curve
     {
         public IReadOnlyCollection<Vector3> Points { get; private set; }
 
-        internal CurveImpl(IEnumerable<Vector3> points)
+        internal Curve(IEnumerable<Vector3> points)
         {
             Points = points.ToList().AsReadOnly();
         }

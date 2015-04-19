@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LimeJelly.CurveSimplifier.Impl;
+using LimeJelly.CurveSimplifier.Simplifier;
 using SharpDX;
 
 namespace LimeJelly.CurveSimplifier
@@ -12,7 +12,7 @@ namespace LimeJelly.CurveSimplifier
         public static IEnumerable<Vector3> PointsFromFile(string filePath, char delimiter = ',')
         {
             return File.ReadLines(filePath)
-                .Select(ln => ln.Split(delimiter).Select(float.Parse).ToArray())
+                .Select(ln => ln.Split(delimiter).Select(Single.Parse).ToArray())
                 .Select(sa => new Vector3(sa[0], sa[1], 0));
         }
 
@@ -27,17 +27,17 @@ namespace LimeJelly.CurveSimplifier
             }
         }
 
-        public static ICurve ToCurve(this IEnumerable<Vector3> source)
+        public static Curve ToCurve(this IEnumerable<Vector3> source)
         {
-            return new CurveImpl(source);
+            return new Curve(source);
         }
 
-        public static ICurveSimplifier DefaultSimplifier(ICurve curve)
+        public static ICurveSimplifier DefaultSimplifier(Curve curve)
         {
             return new RamerDouglasPeuckerSimplifier(curve);
         }
 
-        public static ICurveSimplifier MemoizedSimplifier(ICurve curve)
+        public static ICurveSimplifier MemoizedSimplifier(Curve curve)
         {
             return new RamerDouglasPeuckerSimplifier(curve);
         }

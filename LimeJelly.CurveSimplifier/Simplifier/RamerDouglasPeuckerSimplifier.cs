@@ -2,15 +2,15 @@
 using System.Linq;
 using SharpDX;
 
-namespace LimeJelly.CurveSimplifier.Impl
+namespace LimeJelly.CurveSimplifier.Simplifier
 {
     class RamerDouglasPeuckerSimplifier : MemoizedCurveSimplifier
     {
-        internal RamerDouglasPeuckerSimplifier(ICurve curve) : base(curve) { }
+        internal RamerDouglasPeuckerSimplifier(Curve curve) : base(curve) { }
 
-        protected override ICurve SimplifyImpl(ICurve curve, double epsilon)
+        protected override Curve SimplifyImpl(Curve curve, double epsilon)
         {
-            return new CurveImpl(SimplifyImpl(curve.Points, epsilon));
+            return SimplifyImpl(curve.Points, epsilon).ToCurve();
         }
 
         private IEnumerable<Vector3> SimplifyImpl(IEnumerable<Vector3> region, double epsilon)

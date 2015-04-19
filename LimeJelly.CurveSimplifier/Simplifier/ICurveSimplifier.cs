@@ -1,15 +1,15 @@
-﻿namespace LimeJelly.CurveSimplifier
+﻿namespace LimeJelly.CurveSimplifier.Simplifier
 {
     public interface ICurveSimplifier
     {
         /// <summary>
         /// Returns the sequence of points initially inputted.
         /// </summary>
-        ICurve InitialCurve { get; }
+        Curve InitialCurve { get; }
 
         /// <returns>
         /// A simplification of this curve with the specified epsilon value.
         /// </returns>
-        ICurve Simplify(double epsilon);
+        Curve Simplify(double epsilon);
     }
 }

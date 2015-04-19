@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
 
-namespace LimeJelly.CurveSimplifier.Impl
+namespace LimeJelly.CurveSimplifier.Simplifier
 {
     abstract class MemoizedCurveSimplifier : ICurveSimplifier
     {
-        private readonly IDictionary<double, ICurve> _simplifications;
+        private readonly IDictionary<double, Curve> _simplifications;
 
-        internal MemoizedCurveSimplifier(ICurve curve)
+        internal MemoizedCurveSimplifier(Curve curve)
         {
-            _simplifications = new Dictionary<double, ICurve> { { 0, curve } };
+            _simplifications = new Dictionary<double, Curve> { { 0, curve } };
         }
 
-        public ICurve InitialCurve
+        public Curve InitialCurve
         {
             get { return _simplifications[0]; }
         }
 
-        public ICurve Simplify(double epsilon)
+        public Curve Simplify(double epsilon)
         {
-            ICurve result;
+            Curve result;
             if (_simplifications.TryGetValue(epsilon, out result))
                 return result;
 
@@ -28,6 +28,6 @@ namespace LimeJelly.CurveSimplifier.Impl
             
         }
 
-        protected abstract ICurve SimplifyImpl(ICurve curve, double epsilon);
+        protected abstract Curve SimplifyImpl(Curve curve, double epsilon);
     }
 }

@@ -60,11 +60,10 @@
   <ItemGroup>
     <Compile Include="Factory.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="ICurve.cs" />
-    <Compile Include="ICurveSimplifier.cs" />
-    <Compile Include="Impl\CurveImpl.cs" />
-    <Compile Include="Impl\MemoizedCurveSimplifier.cs" />
-    <Compile Include="Impl\RamerDouglasPeuckerSimplifier.cs" />
+    <Compile Include="Curve.cs" />
+    <Compile Include="Simplifier\ICurveSimplifier.cs" />
+    <Compile Include="Simplifier\MemoizedCurveSimplifier.cs" />
+    <Compile Include="Simplifier\RamerDouglasPeuckerSimplifier.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
