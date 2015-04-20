@@ -109,12 +109,13 @@ namespace LimeJelly.CurveSimplifier
             }
 
             SpriteBatch.Begin();
-            CurrentScreenState.Draw(gameTime, SpriteBatch);
-            SpriteBatch.End();
-
             PrimitiveBatch.Begin();
+            
+            CurrentScreenState.Draw(gameTime, SpriteBatch);
             CurrentScreenState.Draw(gameTime, PrimitiveBatch);
+
             PrimitiveBatch.End();
+            SpriteBatch.End();
 
             base.Draw(gameTime);
         }

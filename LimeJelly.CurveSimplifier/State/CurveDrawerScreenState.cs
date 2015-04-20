@@ -10,10 +10,12 @@ namespace LimeJelly.CurveSimplifier.State
 {
     class CurveDrawerScreenState : ScreenState
     {
+        private readonly SpriteFont _arial16;
         private readonly List<Vector2> _vertices = new List<Vector2>();
 
         public CurveDrawerScreenState(IContentManager cm) : base(cm)
         {
+            _arial16 = ContentManager.Load<SpriteFont>(@"Font\Arial16");
         }
 
         public override void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
@@ -44,6 +46,12 @@ namespace LimeJelly.CurveSimplifier.State
                     _vertices.Add(vec2);
                 }
             }
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch batch)
+        {
+            var text = string.Format("{0} point(s)", _vertices.Count);
+            batch.DrawString(_arial16, text, Vector2.Zero, Color.Black);
         }
 
         public override void Draw(GameTime gameTime, PrimitiveBatch<VertexPositionColor> batch)
