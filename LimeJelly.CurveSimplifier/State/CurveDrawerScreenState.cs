@@ -2,6 +2,7 @@
 using System.Linq;
 using SharpDX;
 using SharpDX.Toolkit;
+using SharpDX.Toolkit.Content;
 using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
 
@@ -10,6 +11,10 @@ namespace LimeJelly.CurveSimplifier.State
     class CurveDrawerScreenState : ScreenState
     {
         private readonly List<Vector2> _vertices = new List<Vector2>();
+
+        public CurveDrawerScreenState(IContentManager cm) : base(cm)
+        {
+        }
 
         public override void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
         {

@@ -1,5 +1,6 @@
 ﻿using SharpDX;
 using SharpDX.Toolkit;
+using SharpDX.Toolkit.Content;
 using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
 
@@ -9,13 +10,16 @@ namespace LimeJelly.CurveSimplifier.State
     {
         public Color ClearColor { get; protected set; }
 
+        protected IContentManager ContentManager { get; private set; }
+
         private ScreenState PreviousState { get; set; }
         public ScreenState NextState { get; private set; }
         public bool ShouldChangeState { get; private set; }
 
-        public ScreenState()
+        public ScreenState(IContentManager cm)
         {
             ClearColor = Color.CornflowerBlue;
+            ContentManager = cm;
         }
 
         public virtual void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
