@@ -13,7 +13,7 @@ namespace LimeJelly.CurveSimplifier.State
 
         public override void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
         {
-            if (keyboard.IsKeyDown(Keys.Escape))
+            if (keyboard.IsKeyPressed(Keys.Escape))
             {
                 PopState();
             }
