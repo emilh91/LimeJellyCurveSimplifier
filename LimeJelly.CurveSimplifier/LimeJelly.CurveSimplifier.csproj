@@ -61,6 +61,8 @@
     <Compile Include="InputFactory.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Curve.cs" />
+    <Compile Include="State\AboutScreenState.cs" />
+    <Compile Include="State\MainMenuScreenState.cs" />
     <Compile Include="State\CurveDrawerScreenState.cs" />
     <Compile Include="State\ScreenState.cs" />
     <Compile Include="Simplifier\ICurveSimplifier.cs" />
@@ -72,6 +74,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ToolkitFont Include="Font\Arial16.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </ToolkitFont>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SharpDX.2.6.3\build\SharpDX.targets" Condition="Exists('..\packages\SharpDX.2.6.3\build\SharpDX.targets')" />

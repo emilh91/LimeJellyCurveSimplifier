@@ -54,9 +54,19 @@ namespace LimeJelly.CurveSimplifier
                 Projection = Matrix.OrthoOffCenterRH(0, Width, Height, 0, 0, 1)
             };
 
-            CurrentScreenState = new CurveDrawerScreenState();
+            CurrentScreenState = new MainMenuScreenState(Content);
 
             base.Initialize();
+        }
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            Content.Load<SpriteFont>(@"Font\Arial16");
+            base.LoadContent();
         }
 
         /// <summary>
