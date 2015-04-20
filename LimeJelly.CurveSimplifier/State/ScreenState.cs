@@ -12,6 +12,9 @@ namespace LimeJelly.CurveSimplifier.State
 
         protected IContentManager ContentManager { get; private set; }
 
+        protected bool IsPaused { get; private set; }
+        protected int FrameCount { get; private set; }
+
         private ScreenState PreviousState { get; set; }
         public ScreenState NextState { get; private set; }
         public bool ShouldChangeState { get; private set; }
@@ -24,6 +27,29 @@ namespace LimeJelly.CurveSimplifier.State
 
         public virtual void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
         {
+            if (keyboard.IsKeyPressed(Keys.Escape))
+            {
+                PopState();
+            }
+            else if (keyboard.IsKeyPressed(Keys.F2))
+            {
+                Reset();
+            }
+            else if (keyboard.IsKeyPressed(Keys.Pause))
+            {
+                if (IsPaused)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
+            }
+            else if (!IsPaused)
+            {
+                FrameCount++;
+            }
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch batch)
@@ -32,6 +58,22 @@ namespace LimeJelly.CurveSimplifier.State
 
         public virtual void Draw(GameTime gameTime, PrimitiveBatch<VertexPositionColor> batch)
         {
+        }
+
+        protected virtual void Reset()
+        {
+            IsPaused = false;
+            FrameCount = 0;
+        }
+
+        protected virtual void Pause()
+        {
+            IsPaused = true;
+        }
+
+        protected virtual void Resume()
+        {
+            IsPaused = false;
         }
 
         protected void PushState(ScreenState state)

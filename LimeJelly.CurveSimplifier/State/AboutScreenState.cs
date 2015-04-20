@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using SharpDX;
+﻿using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Content;
 using SharpDX.Toolkit.Graphics;
@@ -33,12 +31,10 @@ namespace LimeJelly.CurveSimplifier.State
 
         public override void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
         {
-            if (keyboard.IsKeyPressed(Keys.Escape))
-            {
-                PopState();
-            }
+            base.Update(gameTime, keyboard, mouse);
+            if (IsPaused) return;
 
-            if (gameTime.FrameCount%90 == 0)
+            if (FrameCount%90 == 0)
             {
                 const int i = 9, j = 10;
                 var tmp = _lines[i];
@@ -50,6 +46,8 @@ namespace LimeJelly.CurveSimplifier.State
 
         public override void Draw(GameTime gameTime, SpriteBatch batch)
         {
+            base.Draw(gameTime, batch);
+
             for (var i = 0; i < _lines.Length; i++)
             {
                 batch.DrawString(_arial16, _lines[i], new Vector2(10, 50+i*30), Color.Black);
