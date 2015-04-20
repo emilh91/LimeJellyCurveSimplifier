@@ -23,7 +23,12 @@ namespace LimeJelly.CurveSimplifier.State
             base.Update(gameTime, keyboard, mouse);
             if (IsPaused) return;
 
-            if (keyboard.IsKeyPressed(Keys.Z))
+            if (keyboard.IsKeyPressed(Keys.V))
+            {
+                var curve = _vertices.Select(vec2 => (Vector3)vec2).ToCurve();
+                PushState(new VisualizerScreenState(ContentManager, curve));
+            }
+            else if (keyboard.IsKeyPressed(Keys.Z))
             {
                 if (_vertices.Any())
                 {
