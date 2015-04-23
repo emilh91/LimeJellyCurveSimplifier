@@ -1,33 +1,32 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using SharpDX;
 
 namespace LimeJelly.CurveSimplifier.Simplifier
 {
-    abstract class MemoizedCurveSimplifier : ICurveSimplifier
+    abstract class MemoizedCurveSimplifier
     {
-        private readonly IDictionary<double, Curve> _simplifications;
+        protected readonly IList<VisualizationStep> Steps;
 
-        internal MemoizedCurveSimplifier(Curve curve)
+        public int NumSteps { get { return Steps.Count - 1; } }
+
+        public VisualizationStep InitialVisualizationStep { get { return Steps[0]; } }
+
+        public VisualizationStep LastVisualizationStep { get { return Steps[NumSteps]; } }
+
+        internal MemoizedCurveSimplifier(IEnumerable<Vector3> points)
         {
-            _simplifications = new Dictionary<double, Curve> { { 0, curve } };
+            Steps = new List<VisualizationStep>
+            {
+                new VisualizationStep(points, Enumerable.Empty<Vector3>())
+            };
         }
 
-        public Curve InitialCurve
+        public VisualizationStep VisualizationAtStep(int step)
         {
-            get { return _simplifications[0]; }
+            return Steps[step];
         }
 
-        public Curve Simplify(double epsilon)
-        {
-            Curve result;
-            if (_simplifications.TryGetValue(epsilon, out result))
-                return result;
-
-            result = SimplifyImpl(_simplifications[0], epsilon);
-            _simplifications.Add(epsilon, result);
-            return result;
-            
-        }
-
-        protected abstract Curve SimplifyImpl(Curve curve, double epsilon);
+        public abstract void Simplify();
     }
 }

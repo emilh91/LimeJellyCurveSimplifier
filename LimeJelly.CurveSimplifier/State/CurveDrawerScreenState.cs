@@ -25,8 +25,8 @@ namespace LimeJelly.CurveSimplifier.State
 
             if (keyboard.IsKeyPressed(Keys.V))
             {
-                var curve = _vertices.Select(vec2 => (Vector3)vec2).ToCurve();
-                PushState(new VisualizerScreenState(ContentManager, curve));
+                var points = _vertices.Select(vec2 => (Vector3)vec2);
+                PushState(new VisualizerScreenState(ContentManager, points));
             }
             else if (keyboard.IsKeyPressed(Keys.Z))
             {
@@ -63,7 +63,7 @@ namespace LimeJelly.CurveSimplifier.State
 
             if (_vertices.Count >= 1)
             {
-                var lineStrip = vertices.Select(vec3 => new VertexPositionColor(vec3, Color.Black)).ToArray();
+                var lineStrip = vertices.Select(vec3 => new VertexPositionColor(vec3, Color.White)).ToArray();
                 batch.Draw(PrimitiveType.LineStrip, lineStrip);
 
                 var points = vertices.Select(vec3 => new VertexPositionColor(vec3, Color.Red)).ToArray();

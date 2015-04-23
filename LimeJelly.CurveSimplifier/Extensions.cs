@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SharpDX;
 
 namespace LimeJelly.CurveSimplifier
@@ -13,7 +12,7 @@ namespace LimeJelly.CurveSimplifier
         /// <param name="start">One endpoint of the line.</param>
         /// <param name="end">Another endpoint of the line.</param>
         /// <returns>The shortest distance between this point and the line.</returns>
-        public static double DistanceToLine(this Vector3 point, Vector3 start, Vector3 end)
+        public static float DistanceToLine(this Vector3 point, Vector3 start, Vector3 end)
         {
             var lineLength = Vector3.Distance(start, end);
             if (lineLength == 0) // Prevent a divide by zero.
@@ -23,11 +22,6 @@ namespace LimeJelly.CurveSimplifier
             var xLength = end.X - start.X;
             return Math.Abs((yLength * point.X) - (xLength * point.Y) + (end.X * start.Y) - (end.Y * start.X))
                 / lineLength;
-        }
-
-        public static Curve ToCurve(this IEnumerable<Vector3> source)
-        {
-            return new Curve(source);
         }
     }
 }

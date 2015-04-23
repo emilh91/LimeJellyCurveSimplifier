@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using LimeJelly.CurveSimplifier.Simplifier;
 using SharpDX;
 using SharpDX.Toolkit;
@@ -11,25 +12,30 @@ namespace LimeJelly.CurveSimplifier.State
     class VisualizerScreenState : ScreenState
     {
         private readonly SpriteFont _arial16;
-        private readonly MemoizedCurveSimplifier _simplifier;
-        private Curve _currentCurve;
-
-        public VisualizerScreenState(IContentManager cm, Curve inputCurve)
+        private readonly RamerDouglasPeuckerSimplifier _simplifier;
+        private int _currentStepIndex;
+        
+        public VisualizerScreenState(IContentManager cm, IEnumerable<Vector3> points)
             : base(cm)
         {
             _arial16 = ContentManager.Load<SpriteFont>(@"Font\Arial16");
-            _simplifier = new RamerDouglasPeuckerSimplifier(inputCurve);
-            _currentCurve = inputCurve;
+            _simplifier = new RamerDouglasPeuckerSimplifier(points, 0.1f);
         }
 
         public override void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
         {
             base.Update(gameTime, keyboard, mouse);
-            if (IsPaused) return;
 
-            if (gameTime.FrameCount%60 == 0)
+            if (IsPaused)
             {
-                _currentCurve = _simplifier.Simplify(0.25);
+                if (keyboard.IsKeyPressed(Keys.N) && _currentStepIndex < _simplifier.NumSteps)
+                {
+                    _currentStepIndex++;
+                }
+            }
+            else if (FrameCount%60==0 && _currentStepIndex < _simplifier.NumSteps)
+            {
+                _currentStepIndex++;
             }
         }
 
@@ -37,7 +43,8 @@ namespace LimeJelly.CurveSimplifier.State
         {
             base.Draw(gameTime, batch);
 
-            var text = string.Format("{0} point(s)", _currentCurve.Points.Count);
+            var text = string.Format("{0} point(s); step {1}/{2}",
+                _simplifier.NumSteps+1, _currentStepIndex, _simplifier.NumSteps);
             batch.DrawString(_arial16, text, Vector2.Zero, Color.Black);
         }
 
@@ -47,13 +54,28 @@ namespace LimeJelly.CurveSimplifier.State
 
             var width = batch.GraphicsDevice.Viewport.Width;
             var height = batch.GraphicsDevice.Viewport.Height;
-            var vertices = _currentCurve.Points.Select(vec3 => new Vector3(vec3.X*width, vec3.Y*height, 0));
 
-            var lineStrip = vertices.Select(vec3 => new VertexPositionColor(vec3, Color.Black)).ToArray();
-            batch.Draw(PrimitiveType.LineStrip, lineStrip);
+            var ils = _simplifier.InitialVisualizationStep.Points
+                    .Select(vec3 => new Vector3(vec3.X * width, vec3.Y * height, 0))
+                    .Select(vec3 => new VertexPositionColor(vec3, Color.White))
+                    .ToArray();
+            batch.Draw(PrimitiveType.LineStrip, ils);
 
-            var points = vertices.Select(vec3 => new VertexPositionColor(vec3, Color.Red)).ToArray();
-            batch.Draw(PrimitiveType.PointList, points);
+            for (var i = 1; i <= _currentStepIndex; i++)
+            {
+                var ls = _simplifier.VisualizationAtStep(i).Points
+                    .Select(vec3 => new Vector3(vec3.X*width, vec3.Y*height, 0))
+                    .Select(vec3 => new VertexPositionColor(vec3, Color.Black))
+                    .ToArray();
+                batch.Draw(PrimitiveType.LineStrip, ls);
+            }
+        }
+
+        protected override void Reset()
+        {
+            base.Reset();
+
+            _currentStepIndex = 0;
         }
     }
 }
