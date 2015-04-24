@@ -19,7 +19,7 @@ namespace LimeJelly.CurveSimplifier.State
             : base(cm)
         {
             _arial16 = ContentManager.Load<SpriteFont>(@"Font\Arial16");
-            _simplifier = new RamerDouglasPeuckerSimplifier(points, 0.1f);
+            _simplifier = new RamerDouglasPeuckerSimplifier(points, 15f);
         }
 
         public override void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
@@ -43,8 +43,7 @@ namespace LimeJelly.CurveSimplifier.State
         {
             base.Draw(gameTime, batch);
 
-            var text = string.Format("{0} point(s); step {1}/{2}",
-                _simplifier.NumSteps+1, _currentStepIndex, _simplifier.NumSteps);
+            var text = string.Format("Step {0}/{1}", _currentStepIndex, _simplifier.NumSteps);
             batch.DrawString(_arial16, text, Vector2.Zero, Color.Black);
         }
 
@@ -55,18 +54,12 @@ namespace LimeJelly.CurveSimplifier.State
             var width = batch.GraphicsDevice.Viewport.Width;
             var height = batch.GraphicsDevice.Viewport.Height;
 
-            var ils = _simplifier.InitialVisualizationStep.Points
-                    .Select(vec3 => new Vector3(vec3.X * width, vec3.Y * height, 0))
-                    .Select(vec3 => new VertexPositionColor(vec3, Color.White))
-                    .ToArray();
+            var ils = _simplifier.InitialVisualizationStep.Points.Select(vec3 => new VertexPositionColor(vec3, Color.Black)).ToArray();
             batch.Draw(PrimitiveType.LineStrip, ils);
 
             for (var i = 1; i <= _currentStepIndex; i++)
             {
-                var ls = _simplifier.VisualizationAtStep(i).Points
-                    .Select(vec3 => new Vector3(vec3.X*width, vec3.Y*height, 0))
-                    .Select(vec3 => new VertexPositionColor(vec3, Color.Black))
-                    .ToArray();
+                var ls = _simplifier.VisualizationAtStep(i).Points.Select(vec3 => new VertexPositionColor(vec3, Color.Red)).ToArray();
                 batch.Draw(PrimitiveType.LineStrip, ls);
             }
         }

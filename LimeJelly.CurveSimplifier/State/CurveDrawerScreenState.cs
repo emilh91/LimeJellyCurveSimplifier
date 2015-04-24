@@ -11,7 +11,7 @@ namespace LimeJelly.CurveSimplifier.State
     class CurveDrawerScreenState : ScreenState
     {
         private readonly SpriteFont _arial16;
-        private readonly List<Vector2> _vertices = new List<Vector2>();
+        private readonly List<Vector3> _vertices = new List<Vector3>();
 
         public CurveDrawerScreenState(IContentManager cm) : base(cm)
         {
@@ -25,8 +25,10 @@ namespace LimeJelly.CurveSimplifier.State
 
             if (keyboard.IsKeyPressed(Keys.V))
             {
-                var points = _vertices.Select(vec2 => (Vector3)vec2);
-                PushState(new VisualizerScreenState(ContentManager, points));
+                if (_vertices.Any())
+                {
+                    PushState(new VisualizerScreenState(ContentManager, _vertices));
+                }
             }
             else if (keyboard.IsKeyPressed(Keys.Z))
             {
@@ -37,10 +39,10 @@ namespace LimeJelly.CurveSimplifier.State
             }
             else if (mouse.LeftButton.Down)
             {
-                var vec2 = new Vector2(mouse.X, mouse.Y);
-                if (_vertices.Count == 0 || _vertices.Last() != vec2)
+                var vec3 = new Vector3(mouse.X * Width, mouse.Y * Height, 0);
+                if (_vertices.Count == 0 || _vertices.Last() != vec3)
                 {
-                    _vertices.Add(vec2);
+                    _vertices.Add(vec3);
                 }
             }
         }
@@ -59,14 +61,13 @@ namespace LimeJelly.CurveSimplifier.State
 
             var width = batch.GraphicsDevice.Viewport.Width;
             var height = batch.GraphicsDevice.Viewport.Height;
-            var vertices = _vertices.Select(vec2 => new Vector3(vec2.X*width, vec2.Y*height, 0));
 
             if (_vertices.Count >= 1)
             {
-                var lineStrip = vertices.Select(vec3 => new VertexPositionColor(vec3, Color.White)).ToArray();
+                var lineStrip = _vertices.Select(vec3 => new VertexPositionColor(vec3, Color.Black)).ToArray();
                 batch.Draw(PrimitiveType.LineStrip, lineStrip);
 
-                var points = vertices.Select(vec3 => new VertexPositionColor(vec3, Color.Red)).ToArray();
+                var points = _vertices.Select(vec3 => new VertexPositionColor(vec3, Color.Red)).ToArray();
                 batch.Draw(PrimitiveType.PointList, points);
             }
         }

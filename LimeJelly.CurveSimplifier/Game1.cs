@@ -55,6 +55,7 @@ namespace LimeJelly.CurveSimplifier
             };
 
             CurrentScreenState = new MainMenuScreenState(Content);
+            CurrentScreenState.EnsureDimensions(Width, Height);
 
             base.Initialize();
         }
@@ -79,6 +80,10 @@ namespace LimeJelly.CurveSimplifier
             if (ShouldChangeState())
             {
                 CurrentScreenState = CurrentScreenState.NextState;
+                if (CurrentScreenState != null)
+                {
+                    CurrentScreenState.EnsureDimensions(Width, Height);
+                }
             }
 
             if (CurrentScreenState == null)

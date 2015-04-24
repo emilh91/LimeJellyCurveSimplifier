@@ -8,6 +8,8 @@ namespace LimeJelly.CurveSimplifier.State
 {
     class ScreenState
     {
+        public int Width { get; private set; }
+        public int Height { get; private set; }
         public Color ClearColor { get; protected set; }
 
         protected IContentManager ContentManager { get; private set; }
@@ -23,6 +25,12 @@ namespace LimeJelly.CurveSimplifier.State
         {
             ClearColor = Color.CornflowerBlue;
             ContentManager = cm;
+        }
+
+        public void EnsureDimensions(int width, int height)
+        {
+            Width = width;
+            Height = height;
         }
 
         public virtual void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
