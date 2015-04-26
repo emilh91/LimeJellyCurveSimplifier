@@ -1,133 +1,132 @@
+using System;
+using System.Windows.Forms;
 using LimeJelly.CurveSimplifier.State;
-using SharpDX;
-using SharpDX.Toolkit;
-using SharpDX.Toolkit.Graphics;
-using SharpDX.Toolkit.Input;
+using SharpDX.Direct2D1;
+using SharpDX.Direct3D;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
+using SharpDX.Windows;
+using Device = SharpDX.Direct3D11.Device;
+using Factory = SharpDX.Direct2D1.Factory;
+using FeatureLevel = SharpDX.Direct2D1.FeatureLevel;
 
 namespace LimeJelly.CurveSimplifier
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
-    class Game1 : Game
+    class Game1 : IDisposable
     {
-        private const int Width = 800;
-        private const int Height = 600;
-
-        private GraphicsDeviceManager GraphicsDeviceManager { get; set; }
-        private KeyboardManager KeyboardManager { get; set; }
-        private MouseManager MouseManager { get; set; }
-        private SpriteBatch SpriteBatch { get; set; }
-        private PrimitiveBatch<VertexPositionColor> PrimitiveBatch { get; set; }
-        private Effect Effect { get; set; }
+        private readonly RenderForm _form;
+        private readonly RenderTarget _renderTarget;
+        private readonly Device _device;
+        private readonly SwapChain _swapChain;
+        private readonly ResourceFactory _resourceFactory;
         private ScreenState CurrentScreenState { get; set; }
 
         public Game1()
         {
-            GraphicsDeviceManager = new GraphicsDeviceManager(this)
+            _form = new RenderForm
             {
-                PreferredBackBufferWidth = Width,
-                PreferredBackBufferHeight = Height
+                Size = new System.Drawing.Size(800, 600),
+                Text = "LimeJelly Curve Simplifier",
             };
-        }
-
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
-        {
-            Window.Title = "LimeJelly Curve Simplifier";
-            IsMouseVisible = true;
-
-            KeyboardManager = new KeyboardManager(this);
-            MouseManager = new MouseManager(this);
-
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
-            PrimitiveBatch = new PrimitiveBatch<VertexPositionColor>(GraphicsDevice);
-
-            Effect = new BasicEffect(GraphicsDevice)
+            _form.KeyDown += (o, e) =>
             {
-                VertexColorEnabled = true,
-                Projection = Matrix.OrthoOffCenterRH(0, Width, Height, 0, 0, 1)
+                CurrentScreenState.KeyDown(e);
+            };
+            _form.KeyUp += (o, e) =>
+            {
+                CurrentScreenState.KeyUp(e);
+            };
+            _form.MouseDown += (o, e) =>
+            {
+                CurrentScreenState.MouseDown(e);
             };
 
-            CurrentScreenState = new MainMenuScreenState(Content);
-            CurrentScreenState.EnsureDimensions(Width, Height);
+            var swapChainDesc = new SwapChainDescription
+            {
+                BufferCount = 2,
+                Usage = Usage.RenderTargetOutput,
+                OutputHandle = _form.Handle,
+                IsWindowed = true,
+                ModeDescription = new ModeDescription(0, 0, new Rational(60, 1), Format.R8G8B8A8_UNorm),
+                SampleDescription = new SampleDescription(1, 0),
+                Flags = SwapChainFlags.AllowModeSwitch,
+                SwapEffect = SwapEffect.Discard
+            };
+            Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.BgraSupport, swapChainDesc, out _device, out _swapChain);
 
-            base.Initialize();
+            using (var factory = new Factory())
+            {
+                var dpi = factory.DesktopDpi;
+                var backBuffer = Surface.FromSwapChain(_swapChain, 0);
+                var rtp = new RenderTargetProperties
+                {
+                    DpiX = dpi.Width,
+                    DpiY = dpi.Height,
+                    MinLevel = FeatureLevel.Level_DEFAULT,
+                    PixelFormat = new PixelFormat(Format.Unknown, AlphaMode.Ignore),
+                    Type = RenderTargetType.Default,
+                    Usage = RenderTargetUsage.None,
+                };
+                _renderTarget = new RenderTarget(factory, backBuffer, rtp);
+            }
+
+            _resourceFactory = new ResourceFactory(_renderTarget);
+
+            CurrentScreenState = new MainMenuScreenState();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
+        ~Game1()
         {
-            Content.Load<SpriteFont>(@"Font\Arial16");
-            base.LoadContent();
+            Dispose(false);
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
+        public void Run()
+        {
+            RenderLoop.Run(_form, GameLoop);
+        }
+
+        private void GameLoop()
         {
             if (ShouldChangeState())
             {
                 CurrentScreenState = CurrentScreenState.NextState;
-                if (CurrentScreenState != null)
-                {
-                    CurrentScreenState.EnsureDimensions(Width, Height);
-                }
             }
 
             if (CurrentScreenState == null)
             {
-                Exit();
+                Application.Exit();
             }
             else
             {
-                var keyboard = KeyboardManager.GetState();
-                var mouse = MouseManager.GetState();
-                CurrentScreenState.Update(gameTime, keyboard, mouse);
+                CurrentScreenState.Update();
+
+                _renderTarget.BeginDraw();
+                CurrentScreenState.Draw(_renderTarget, _resourceFactory);
+                _renderTarget.EndDraw();
+                _swapChain.Present(1, PresentFlags.None);
             }
-
-            base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(CurrentScreenState.ClearColor);
-
-            foreach (var pass in Effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-            }
-
-            SpriteBatch.Begin();
-            PrimitiveBatch.Begin();
-            
-            CurrentScreenState.Draw(gameTime, SpriteBatch);
-            CurrentScreenState.Draw(gameTime, PrimitiveBatch);
-
-            PrimitiveBatch.End();
-            SpriteBatch.End();
-
-            base.Draw(gameTime);
         }
 
         private bool ShouldChangeState()
         {
             return CurrentScreenState != null && CurrentScreenState.ShouldChangeState;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _resourceFactory.Dispose();
+                _renderTarget.Dispose();
+                _swapChain.Dispose();
+                _device.Dispose();
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using SharpDX;
 
 namespace LimeJelly.CurveSimplifier
 {
-    public static class Extensions
+    static class Extensions
     {
         /// <summary>
         /// Determines the (shortest) distance between this point and the line which passes between two other points.
@@ -12,11 +12,11 @@ namespace LimeJelly.CurveSimplifier
         /// <param name="start">One endpoint of the line.</param>
         /// <param name="end">Another endpoint of the line.</param>
         /// <returns>The shortest distance between this point and the line.</returns>
-        public static float DistanceToLine(this Vector3 point, Vector3 start, Vector3 end)
+        public static float DistanceToLine(this Vector2 point, Vector2 start, Vector2 end)
         {
-            var lineLength = Vector3.Distance(start, end);
+            var lineLength = Vector2.Distance(start, end);
             if (lineLength == 0) // Prevent a divide by zero.
-                return Vector3.Distance(point, start);
+                return Vector2.Distance(point, start);
 
             var yLength = end.Y - start.Y;
             var xLength = end.X - start.X;

@@ -1,39 +1,49 @@
-﻿using SharpDX;
-using SharpDX.Toolkit;
-using SharpDX.Toolkit.Content;
-using SharpDX.Toolkit.Graphics;
-using SharpDX.Toolkit.Input;
+﻿using System.Windows.Forms;
+using SharpDX;
+using SharpDX.Direct2D1;
 
 namespace LimeJelly.CurveSimplifier.State
 {
     class MainMenuScreenState : ScreenState
     {
-        public MainMenuScreenState(IContentManager cm) : base(cm)
+        private readonly string[] _lines;
+
+        public MainMenuScreenState()
         {
+            _lines = new []
+            {
+                "[D]raw curve",
+                "[A]bout",
+            };
         }
 
-        public override void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
+        public override void KeyDown(KeyEventArgs e)
         {
-            base.Update(gameTime, keyboard, mouse);
-            if (IsPaused) return;
+            base.KeyDown(e);
 
-            if (keyboard.IsKeyPressed(Keys.A))
+            if (e.KeyCode == Keys.A)
             {
-                PushState(new AboutScreenState(ContentManager));
+                PushState(new AboutScreenState());
             }
-            else if (keyboard.IsKeyPressed(Keys.D))
+            else if (e.KeyCode == Keys.D)
             {
-                PushState(new CurveDrawerScreenState(ContentManager));
+                PushState(new CurveDrawerScreenState());
             }
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch batch)
+        public override void Draw(RenderTarget renderTarget, ResourceFactory rf)
         {
-            base.Draw(gameTime, batch);
+            renderTarget.Clear(Color.White);
 
-            var arial16 = ContentManager.Load<SpriteFont>(@"Font\Arial16");
-            batch.DrawString(arial16, "[D]raw curve", new Vector2(10, 50), Color.Black);
-            batch.DrawString(arial16, "[A]bout", new Vector2(10, 80), Color.Black);
+            var font = rf.GetFont("Arial", 16);
+            var brush = rf.GetSolidColorBrush(Color.Black);
+
+            for (var i = 0; i < _lines.Length; i++)
+            {
+                const int leftMargin = 10;
+                var rect = new RectangleF(leftMargin, 50 + i * 30, renderTarget.Size.Width - leftMargin, 30);
+                renderTarget.DrawText(_lines[i], font, rect, brush);
+            }
         }
     }
 }

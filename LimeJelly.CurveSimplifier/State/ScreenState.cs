@@ -1,19 +1,10 @@
-﻿using SharpDX;
-using SharpDX.Toolkit;
-using SharpDX.Toolkit.Content;
-using SharpDX.Toolkit.Graphics;
-using SharpDX.Toolkit.Input;
+﻿using System.Windows.Forms;
+using SharpDX.Direct2D1;
 
 namespace LimeJelly.CurveSimplifier.State
 {
-    class ScreenState
+    abstract class ScreenState
     {
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public Color ClearColor { get; protected set; }
-
-        protected IContentManager ContentManager { get; private set; }
-
         protected bool IsPaused { get; private set; }
         protected int FrameCount { get; private set; }
 
@@ -21,29 +12,17 @@ namespace LimeJelly.CurveSimplifier.State
         public ScreenState NextState { get; private set; }
         public bool ShouldChangeState { get; private set; }
 
-        public ScreenState(IContentManager cm)
+        public virtual void KeyDown(KeyEventArgs e)
         {
-            ClearColor = Color.CornflowerBlue;
-            ContentManager = cm;
-        }
-
-        public void EnsureDimensions(int width, int height)
-        {
-            Width = width;
-            Height = height;
-        }
-
-        public virtual void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
-        {
-            if (keyboard.IsKeyPressed(Keys.Escape))
+            if (e.KeyCode == Keys.Escape)
             {
                 PopState();
             }
-            else if (keyboard.IsKeyPressed(Keys.F2))
+            else if (e.KeyCode == Keys.F2)
             {
                 Reset();
             }
-            else if (keyboard.IsKeyPressed(Keys.Pause))
+            else if (e.KeyCode == Keys.Pause)
             {
                 if (IsPaused)
                 {
@@ -54,19 +33,41 @@ namespace LimeJelly.CurveSimplifier.State
                     Pause();
                 }
             }
-            else if (!IsPaused)
+        }
+
+        public virtual void KeyUp(KeyEventArgs e)
+        {
+        }
+
+        public virtual void KeyPress(KeyPressEventArgs e)
+        {
+        }
+
+        public virtual void MouseDown(MouseEventArgs e)
+        {
+        }
+
+        public virtual void MouseUp(MouseEventArgs e)
+        {
+        }
+
+        public virtual void MouseClick(MouseEventArgs e)
+        {
+        }
+
+        public virtual void MouseDoubleClick(MouseEventArgs e)
+        {
+        }
+
+        public virtual void Update()
+        {
+            if (!IsPaused)
             {
                 FrameCount++;
             }
         }
 
-        public virtual void Draw(GameTime gameTime, SpriteBatch batch)
-        {
-        }
-
-        public virtual void Draw(GameTime gameTime, PrimitiveBatch<VertexPositionColor> batch)
-        {
-        }
+        public abstract void Draw(RenderTarget renderTarget, ResourceFactory rf);
 
         protected virtual void Reset()
         {
@@ -91,7 +92,7 @@ namespace LimeJelly.CurveSimplifier.State
             ShouldChangeState = true;
         }
 
-        protected void PopState()
+        private void PopState()
         {
             NextState = PreviousState;
             ShouldChangeState = true;

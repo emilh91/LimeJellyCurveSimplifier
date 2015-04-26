@@ -1,82 +1,79 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
+using LimeJelly.CurveSimplifier.Visualization;
 using SharpDX;
-using SharpDX.Toolkit;
-using SharpDX.Toolkit.Content;
-using SharpDX.Toolkit.Graphics;
-using SharpDX.Toolkit.Input;
+using SharpDX.Direct2D1;
 
 namespace LimeJelly.CurveSimplifier.State
 {
     class CurveDrawerScreenState : ScreenState
     {
-        private readonly SpriteFont _arial16;
-        private readonly List<Vector3> _vertices = new List<Vector3>();
+        private readonly List<Vector2> _points;
 
-        public CurveDrawerScreenState(IContentManager cm) : base(cm)
+        public CurveDrawerScreenState(IEnumerable<Vector2> points = null)
         {
-            _arial16 = ContentManager.Load<SpriteFont>(@"Font\Arial16");
+            _points = (points ?? Enumerable.Empty<Vector2>()).ToList();
         }
 
-        public override void Update(GameTime gameTime, KeyboardState keyboard, MouseState mouse)
+        public override void KeyUp(KeyEventArgs e)
         {
-            base.Update(gameTime, keyboard, mouse);
-            if (IsPaused) return;
+            base.KeyUp(e);
 
-            if (keyboard.IsKeyPressed(Keys.V))
+            if (e.KeyCode == Keys.V)
             {
-                if (_vertices.Any())
+                if (_points.Any())
                 {
-                    PushState(new VisualizerScreenState(ContentManager, _vertices));
+                    var vs = new RdpVisualizationStep(_points, 25);
+                    PushState(new VisualizerScreenState(vs));
                 }
             }
-            else if (keyboard.IsKeyPressed(Keys.Z))
+            else if (e.KeyCode == Keys.Z)
             {
-                if (_vertices.Any())
+                if (_points.Any())
                 {
-                    _vertices.RemoveAt(_vertices.Count - 1);
-                }
-            }
-            else if (mouse.LeftButton.Down)
-            {
-                var vec3 = new Vector3(mouse.X * Width, mouse.Y * Height, 0);
-                if (_vertices.Count == 0 || _vertices.Last() != vec3)
-                {
-                    _vertices.Add(vec3);
+                    _points.RemoveAt(_points.Count - 1);
                 }
             }
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch batch)
+        public override void MouseDown(MouseEventArgs e)
         {
-            base.Draw(gameTime, batch);
+            base.MouseDown(e);
 
-            var text = string.Format("{0} point(s)", _vertices.Count);
-            batch.DrawString(_arial16, text, Vector2.Zero, Color.Black);
+            var vec2 = new Vector2(e.X, e.Y);
+            if (_points.Count == 0 || _points.Last() != vec2)
+            {
+                _points.Add(vec2);
+            }
         }
 
-        public override void Draw(GameTime gameTime, PrimitiveBatch<VertexPositionColor> batch)
+        public override void Draw(RenderTarget renderTarget, ResourceFactory rf)
         {
-            base.Draw(gameTime, batch);
+            renderTarget.Clear(Color.White);
 
-            var width = batch.GraphicsDevice.Viewport.Width;
-            var height = batch.GraphicsDevice.Viewport.Height;
+            var brush = rf.GetSolidColorBrush(Color.Black);
 
-            if (_vertices.Count >= 1)
+            for (var i = 1; i < _points.Count; i++)
             {
-                var lineStrip = _vertices.Select(vec3 => new VertexPositionColor(vec3, Color.Black)).ToArray();
-                batch.Draw(PrimitiveType.LineStrip, lineStrip);
-
-                var points = _vertices.Select(vec3 => new VertexPositionColor(vec3, Color.Red)).ToArray();
-                batch.Draw(PrimitiveType.PointList, points);
+                renderTarget.DrawLine(_points[i - 1], _points[i], brush);
             }
+
+            foreach (var vec2 in _points)
+            {
+                renderTarget.FillEllipse(new Ellipse(vec2, 2, 2), brush);
+            }
+
+            var font = rf.GetFont("Arial", 16);
+            var rect = new RectangleF(0, 0, renderTarget.Size.Width, 30);
+            renderTarget.DrawText(_points.Count + " point(s)", font, rect, brush);
         }
 
         protected override void Reset()
         {
             base.Reset();
 
-            _vertices.Clear();
+            _points.Clear();
         }
     }
 }
