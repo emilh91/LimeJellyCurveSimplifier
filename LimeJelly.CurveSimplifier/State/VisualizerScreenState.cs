@@ -68,7 +68,7 @@ namespace LimeJelly.CurveSimplifier.State
             }
 
             var font = rf.GetFont("Arial", 16);
-            var rect = new RectangleF(0, 0, renderTarget.Size.Width, 100);
+            var rect = new RectangleF(0, 0, renderTarget.Size.Width, 30);
 
             var text1 = string.Format("Initially: {0} point(s)", _steps.First().GetPoints().Count());
             font.TextAlignment = TextAlignment.Leading;
@@ -78,18 +78,17 @@ namespace LimeJelly.CurveSimplifier.State
             font.TextAlignment = TextAlignment.Center;
             renderTarget.DrawText(text2, font, rect, rf.GetSolidColorBrush(Color.Black));
 
+            var text3 = "";
             if (_visualizationFinished)
             {
-                var text3 = string.Format("Step {0}: {1} point(s)", _steps.Count - 1, _steps.Last().GetPoints().Count(p => p.Item2==Color.Black));
-                font.TextAlignment = TextAlignment.Trailing;
-                renderTarget.DrawText(text3, font, rect, rf.GetSolidColorBrush(Color.Black));
+                text3 = string.Format("Step {0}: {1} point(s)", _steps.Count - 1, _steps.Last().GetPoints().Count(p => p.Item2 == Color.Black));
             }
             else if (IsPaused)
             {
-                var text3 = string.Format("Paused; computed {0} step(s) so far", _steps.Count - 1);
-                font.TextAlignment = TextAlignment.Trailing;
-                renderTarget.DrawText(text3, font, rect, rf.GetSolidColorBrush(Color.Black));
+                text3 = string.Format("Paused; computed {0} step(s) so far", _steps.Count - 1);
             }
+            font.TextAlignment = TextAlignment.Trailing;
+            renderTarget.DrawText(text3, font, rect, rf.GetSolidColorBrush(Color.Black));
         }
 
         protected override void Reset()
