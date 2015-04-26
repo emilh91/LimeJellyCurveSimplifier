@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Linq;
+using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Direct2D1;
 
@@ -13,6 +14,7 @@ namespace LimeJelly.CurveSimplifier.State
             _lines = new []
             {
                 "[D]raw curve",
+                "[R]andomly generate curve",
                 "[A]bout",
             };
         }
@@ -28,6 +30,11 @@ namespace LimeJelly.CurveSimplifier.State
             else if (e.KeyCode == Keys.D)
             {
                 PushState(new CurveDrawerScreenState());
+            }
+            else if (e.KeyCode == Keys.R)
+            {
+                var points = InputFactory.RandomPoints().TakeWhile(p => p.X < 760);
+                PushState(new CurveDrawerScreenState(points));
             }
         }
 

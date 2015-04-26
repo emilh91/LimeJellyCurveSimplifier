@@ -15,13 +15,15 @@ namespace LimeJelly.CurveSimplifier
                 .Select(sa => new Vector2(sa[0], sa[1]));
         }
 
-        public static IEnumerable<Vector2> RandomPoints(float xMax = 1000, float yMax = 1000)
+        public static IEnumerable<Vector2> RandomPoints()
         {
             var rand = new Random();
+
+            var x = rand.NextFloat(0, 15);
             while (true)
             {
-                var x = rand.NextFloat(0, xMax);
-                var y = rand.NextFloat(0, yMax);
+                x = rand.NextFloat(x + 15, x + 30);
+                var y = rand.NextFloat(100, 500);
                 yield return new Vector2(x, y);
             }
         }
