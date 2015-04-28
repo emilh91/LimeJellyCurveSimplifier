@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using LimeJelly.CurveSimplifier.Visualization;
 using SharpDX;
 using SharpDX.Direct2D1;
+using LimeJelly.CurveSimplifier.Simplification;
 
 namespace LimeJelly.CurveSimplifier.State
 {
@@ -24,8 +25,8 @@ namespace LimeJelly.CurveSimplifier.State
             {
                 if (_points.Any())
                 {
-                    var vs = new RdpVisualizationStep(_points, 25);
-                    PushState(new VisualizerScreenState(vs));
+                    var simpl = new RdpCurveSimplifier(_points, 25);
+                    PushState(new VisualizerScreenState(simpl));
                 }
             }
             else if (e.KeyCode == Keys.Z)

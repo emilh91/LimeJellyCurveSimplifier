@@ -5,18 +5,21 @@ using LimeJelly.CurveSimplifier.Visualization;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
+using LimeJelly.CurveSimplifier.Simplification;
 
 namespace LimeJelly.CurveSimplifier.State
 {
     class VisualizerScreenState : ScreenState
     {
+        private ICurveSimplifier _simplifier;
         private readonly List<IVisualizationStep> _steps;
         private int _currentStepIndex;
         private bool _visualizationFinished;
         
-        public VisualizerScreenState(IVisualizationStep vs)
+        public VisualizerScreenState(ICurveSimplifier simplifier)
         {
-            _steps = new List<IVisualizationStep> {vs};
+            _simplifier = simplifier;
+            _steps = new List<IVisualizationStep> { _simplifier.Initial() };
         }
 
         public override void KeyUp(KeyEventArgs e)
@@ -64,7 +67,7 @@ namespace LimeJelly.CurveSimplifier.State
             foreach (var point in points)
             {
                 var brush = rf.GetSolidColorBrush(point.Item2);
-                renderTarget.FillEllipse(new Ellipse(point.Item1, 2, 2), brush);
+                renderTarget.FillEllipse(new Ellipse(point.Item1, point.Item3, point.Item3), brush);
             }
 
             var font = rf.GetFont("Arial", 16);
@@ -102,7 +105,7 @@ namespace LimeJelly.CurveSimplifier.State
         {
             if (_currentStepIndex == _steps.Count - 1)
             {
-                var nextStep = _steps.Last().NextStep();
+                var nextStep = _simplifier.NextStep();
                 _visualizationFinished = nextStep == null;
                 if (!_visualizationFinished)
                 {

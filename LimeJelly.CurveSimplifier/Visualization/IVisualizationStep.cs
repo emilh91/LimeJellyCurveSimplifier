@@ -8,8 +8,6 @@ namespace LimeJelly.CurveSimplifier.Visualization
     {
         IEnumerable<Tuple<Vector2, Vector2, Color, float>> GetSegments();
         
-        IEnumerable<Tuple<Vector2, Color>> GetPoints();
-        
-        IVisualizationStep NextStep();
+        IEnumerable<Tuple<Vector2, Color, float>> GetPoints();
     }
 }

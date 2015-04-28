@@ -58,6 +58,10 @@
     <Compile Include="Game1.cs" />
     <Compile Include="ResourceFactory.cs" />
     <Compile Include="InputFactory.cs" />
+    <Compile Include="Simplification\BaseCurveSimplifier.cs" />
+    <Compile Include="Simplification\ICurveSimplifier.cs" />
+    <Compile Include="Simplification\RdpCurveSimplifier.cs" />
+    <Compile Include="Visualization\BaseVisualizationStep.cs" />
     <Compile Include="Visualization\RdpVisualizationStep.cs" />
     <Compile Include="Visualization\IVisualizationStep.cs" />
     <Compile Include="State\AboutScreenState.cs" />
