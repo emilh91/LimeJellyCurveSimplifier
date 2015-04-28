@@ -25,7 +25,7 @@ namespace LimeJelly.CurveSimplifier.State
             {
                 if (_points.Any())
                 {
-                    var simpl = new RdpCurveSimplifier(_points, 25);
+                    var simpl = new VisvalingamCurveSimplifier(_points);
                     PushState(new VisualizerScreenState(simpl));
                 }
             }
