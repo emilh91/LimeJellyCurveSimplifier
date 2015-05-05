@@ -25,8 +25,7 @@ namespace LimeJelly.CurveSimplifier.State
             {
                 if (_points.Any())
                 {
-                    var simpl = new VisvalingamCurveSimplifier(_points);
-                    PushState(new VisualizerScreenState(simpl));
+                    PushState(new AlgorithmMenuScreenState(_points));
                 }
             }
             else if (e.KeyCode == Keys.Z)
