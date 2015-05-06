@@ -87,7 +87,16 @@ namespace LimeJelly.CurveSimplifier.Simplification
             }
 
             //TODO: prettier visualization
-            return new BaseVisualizationStep(Points, SolutionSegments, SolutionPoints);
+            return Visualize();
+        }
+
+        private IVisualizationStep Visualize()
+        {
+            var smallest = _heap.FirstOrDefault();
+            if (smallest == null || smallest.Area > _maxAreaToRemove)
+                return new BaseVisualizationStep(Points, SolutionSegments, SolutionPoints);
+
+            return new VisvalingamVisualizationStep(Points, SolutionSegments, SolutionPoints, smallest.Index);
         }
 
 

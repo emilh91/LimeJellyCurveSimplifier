@@ -13,7 +13,7 @@ namespace LimeJelly.CurveSimplifier.Visualization
     /// </summary>
     class BaseVisualizationStep : IVisualizationStep
     {
-        private IReadOnlyList<Vector2> _curve;
+        protected IReadOnlyList<Vector2> Curve { get; private set; }
 
         private ICollection<Tuple<Vector2, Vector2, Color, float>> _originalSegments;
         private ICollection<Tuple<Vector2, Vector2, Color, float>> _solutionSegments;
@@ -21,14 +21,14 @@ namespace LimeJelly.CurveSimplifier.Visualization
 
         public BaseVisualizationStep(IReadOnlyList<Vector2> curve)
         {
-            _curve = curve;
+            Curve = curve;
             _originalSegments = new List<Tuple<Vector2, Vector2, Color, float>>();
             for (int i = 0; i < curve.Count - 1; ++i)
             {
                 _originalSegments.Add(Tuple.Create(curve[i], curve[i + 1], Color.LightSlateGray, 2f));
             }
             _solutionSegments = new List<Tuple<Vector2, Vector2, Color, float>>();
-            _points = _curve.Select(p => Tuple.Create(p, Color.LightSlateGray, 2f)).ToList();
+            _points = Curve.Select(p => Tuple.Create(p, Color.LightSlateGray, 2f)).ToList();
         }
         public BaseVisualizationStep(IReadOnlyList<Vector2> curve, IEnumerable<Tuple<int, int>> solutionSegments, IEnumerable<int> solutionPoints)
             : this(curve)
@@ -39,11 +39,11 @@ namespace LimeJelly.CurveSimplifier.Visualization
         public void SetSolution(IEnumerable<Tuple<int, int>> solutionSegments, IEnumerable<int> solutionPoints)
         {
             _solutionSegments = solutionSegments
-                .Select(s => Tuple.Create(_curve[s.Item1], _curve[s.Item2], Color.Black, 2f))
+                .Select(s => Tuple.Create(Curve[s.Item1], Curve[s.Item2], Color.Black, 2f))
                 .ToList();
 
             var set = solutionPoints as ISet<int> ?? new HashSet<int>(solutionPoints);
-            _points = _curve.Select((p, i) => Tuple.Create(p, set.Contains(i) ? Color.Black : Color.LightSlateGray, 2f)).ToList();
+            _points = Curve.Select((p, i) => Tuple.Create(p, set.Contains(i) ? Color.Black : Color.LightSlateGray, 2f)).ToList();
         }
 
 
@@ -67,15 +67,20 @@ namespace LimeJelly.CurveSimplifier.Visualization
             return _points;
         }
 
+        public virtual IEnumerable<Polygon> GetPolygons()
+        {
+            return Enumerable.Empty<Polygon>();
+        }
+
 
         protected Tuple<Vector2, Vector2, Color, float> Segment(int start, int end, Color color, float width)
         {
-            return Tuple.Create(_curve[start], _curve[end], color, width);
+            return Tuple.Create(Curve[start], Curve[end], color, width);
         }
 
         protected Tuple<Vector2, Color, float> Point(int index, Color color, float radius = 2)
         {
-            return Tuple.Create(_curve[index], color, radius);
+            return Tuple.Create(Curve[index], color, radius);
         }
 
     }
