@@ -34,7 +34,7 @@ namespace LimeJelly.CurveSimplifier.State
             }
             else if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2)
             {
-                var simpl = new VisvalingamCurveSimplifier(_points);
+                var simpl = new VisvalingamCurveSimplifier(_points, 1000);
                 PushState(new VisualizerScreenState(simpl));
             }
         }

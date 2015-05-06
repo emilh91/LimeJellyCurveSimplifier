@@ -19,9 +19,12 @@ namespace LimeJelly.CurveSimplifier.Simplification
         // The top triangle has the smallest area.
         private SortedSet<Triangle> _heap;
 
+        private float _maxAreaToRemove;
 
-        public VisvalingamCurveSimplifier(IEnumerable<Vector2> points) : base(points)
+
+        public VisvalingamCurveSimplifier(IEnumerable<Vector2> points, float maxAreaToRemove) : base(points)
         {
+            _maxAreaToRemove = maxAreaToRemove;
             // Construct _triangles (being sure to add nulls on either end so that its indices match Points)
             _triangles = new List<Triangle> { null };
             for (int i = 1; i < Points.Count - 1; ++i)
@@ -42,9 +45,8 @@ namespace LimeJelly.CurveSimplifier.Simplification
         public override IVisualizationStep NextStep()
         {
             // "pop" the triangle with the smallest area from the queue
-            // TODO: terminate before all triangles are popped
             var smallest = _heap.FirstOrDefault();
-            if (smallest == null)
+            if (smallest == null || smallest.Area >= _maxAreaToRemove)
                 return null; // no more, our work here is done
             _heap.Remove(smallest);
 
