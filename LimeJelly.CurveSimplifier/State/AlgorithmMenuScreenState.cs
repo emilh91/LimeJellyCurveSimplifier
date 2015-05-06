@@ -20,7 +20,9 @@ namespace LimeJelly.CurveSimplifier.State
             {
                 "Ramer-Douglas-Peucker",
                 "Visvalingam",
-                "Reumann-Witkam"
+                "Reumann-Witkam",
+                "Opheim",
+                "Lang",
             };
         }
 
@@ -41,6 +43,15 @@ namespace LimeJelly.CurveSimplifier.State
             else if (e.KeyCode == Keys.D3 || e.KeyCode == Keys.NumPad3)
             {
                 var simpl = new ReumannWitkamCurveSimplifier(_points, 50f);
+                PushState(new VisualizerScreenState(simpl));
+            }
+            else if (e.KeyCode == Keys.D4 || e.KeyCode == Keys.NumPad4)
+            {
+                // TODO Opheim
+            }
+            else if (e.KeyCode == Keys.D5 || e.KeyCode == Keys.NumPad5)
+            {
+                var simpl = new LangCurveSimplifier(_points, 250);
                 PushState(new VisualizerScreenState(simpl));
             }
         }
