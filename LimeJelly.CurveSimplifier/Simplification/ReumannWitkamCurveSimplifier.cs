@@ -18,7 +18,8 @@ namespace LimeJelly.CurveSimplifier.Simplification
             _tolerance = tolerance;
             _keyPointIndex = 0;
 
-            AddEntireCurveToSolution();
+            if (Points.Count > 0) // you never know
+                AddPointToSolution(_keyPointIndex);
         }
 
         public override IVisualizationStep NextStep()
@@ -35,10 +36,8 @@ namespace LimeJelly.CurveSimplifier.Simplification
                 ++testPointIndex;
             }
 
-            for (var i = _keyPointIndex + 1; i < testPointIndex - 1; ++i)
-            {
-                RemovePointFromSolution(i);
-            }
+            AddPointToSolution(testPointIndex - 1);
+            AddSegmentToSolution(_keyPointIndex, testPointIndex - 1);
             _keyPointIndex = testPointIndex - 1;
             return new BaseVisualizationStep(Points, SolutionSegments, SolutionPoints);
 
