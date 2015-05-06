@@ -51,11 +51,7 @@ namespace LimeJelly.CurveSimplifier.Simplification
 
             var keyPoint = Points[start];
             var endPoint = Points[end];
-            var farthestPoint = Points
-                .Where((p, i) => i > start && i < end)
-                .OrderByDescending(p => p.DistanceToLine(keyPoint, endPoint))
-                .First();
-            var farthestDistance = farthestPoint.DistanceToLine(keyPoint, endPoint);
+            var farthestDistance = Points.Max(p => p.DistanceToLine(keyPoint, endPoint));
 
             if (farthestDistance <= _epsilon)
             {
