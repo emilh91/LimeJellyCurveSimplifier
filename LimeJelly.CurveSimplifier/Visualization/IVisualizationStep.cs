@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LimeJelly.CurveSimplifier.Geometry;
 using SharpDX;
 
 namespace LimeJelly.CurveSimplifier.Visualization

@@ -1,12 +1,9 @@
-﻿using SharpDX;
-using SharpDX.Direct2D1;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SharpDX;
+using SharpDX.Direct2D1;
 
-namespace LimeJelly.CurveSimplifier.Visualization
+namespace LimeJelly.CurveSimplifier.Geometry
 {
     public class Polygon
     {
@@ -27,7 +24,7 @@ namespace LimeJelly.CurveSimplifier.Visualization
         public Color Color { get; private set; }
 
         private PathGeometry _geometry;
-        public Geometry GetGeometry(Factory factory)
+        public SharpDX.Direct2D1.Geometry GetGeometry(Factory factory)
         {
             if (_geometry != null)
                 return _geometry;
