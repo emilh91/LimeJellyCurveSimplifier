@@ -15,7 +15,7 @@ namespace LimeJelly.CurveSimplifier.State
         private readonly List<IVisualizationStep> _steps;
         private int _currentStepIndex;
         private bool _visualizationFinished;
-        
+
         public VisualizerScreenState(ICurveSimplifier simplifier)
         {
             _simplifier = simplifier;
@@ -61,6 +61,12 @@ namespace LimeJelly.CurveSimplifier.State
             {
                 var brush = rf.GetSolidColorBrush(segment.Item3);
                 renderTarget.DrawLine(segment.Item1, segment.Item2, brush, segment.Item4);
+            }
+
+            foreach (var poly in step.GetPolygons())
+            {
+                var brush = rf.GetSolidColorBrush(poly.Color);
+                renderTarget.FillGeometry(poly.GetGeometry(renderTarget.Factory), brush);
             }
 
             var points = step.GetPoints().ToList();
