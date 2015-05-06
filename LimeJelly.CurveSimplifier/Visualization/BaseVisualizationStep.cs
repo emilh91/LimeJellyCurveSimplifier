@@ -79,6 +79,19 @@ namespace LimeJelly.CurveSimplifier.Visualization
             return Tuple.Create(Curve[start], Curve[end], color, width);
         }
 
+        protected Tuple<Vector2, Vector2, Color, float> Highlight(int start, int end, Color color, float width)
+        {
+            var s = Curve[start];
+            var e = Curve[end];
+            var slope = s.X != e.X
+                ? (e.Y - s.Y) / (e.X - s.X)
+                : 10000f; //TODO: maybe a better way to handle this?
+            var intersect = s.Y - (slope * s.X);
+            var newStart = new Vector2(-1000f, (slope * -1000f) + intersect);
+            var newEnd = new Vector2(2000f, (slope * 2000f) + intersect);
+            return Tuple.Create(newStart, newEnd, color, width);
+        }
+
         protected Tuple<Vector2, Color, float> Point(int index, Color color, float radius = 2)
         {
             return Tuple.Create(Curve[index], color, radius);

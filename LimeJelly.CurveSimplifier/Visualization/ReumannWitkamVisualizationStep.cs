@@ -25,7 +25,7 @@ namespace LimeJelly.CurveSimplifier.Visualization
         public override IEnumerable<Tuple<Vector2, Vector2, Color, float>> GetSegments()
         {
             // highlight epsilon
-            yield return Segment(_start, _end, Color.LightBlue, _tolerance * 2);
+            yield return Highlight(_start, _end, Color.LightBlue, _tolerance * 2);
 
             foreach (var seg in base.GetSegments())
                 yield return seg;
