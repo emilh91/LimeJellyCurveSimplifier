@@ -40,7 +40,7 @@ namespace LimeJelly.CurveSimplifier.Simplification
             var end = testPointIndex - 1;
             AddSegmentToSolution(start, end);
             _keyPointIndex = end;
-            return new ReumannWitkamVisualizationStep(Points, SolutionSegments, SolutionPoints, start, end, _tolerance);
+            return new ReumannWitkamVisualizationStep(Points, SolutionSegments, SolutionPoints, start, start + 1, _tolerance);
 
         }
     }
