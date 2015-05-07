@@ -32,27 +32,96 @@ namespace LimeJelly.CurveSimplifier.State
 
             if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1)
             {
-                var simpl = new RdpCurveSimplifier(_points, 20);
+                var input = "20";
+                var validInput = 0;
+
+                do
+                {
+                    const string text = "Enter a tolerance value below. This is used by the Ramer-Douglas-Peucker algorithm as the epsilon.";
+                    input = Microsoft.VisualBasic.Interaction.InputBox(text, "Prompt", input);
+                    if (input == "") break;
+                } while (!int.TryParse(input, out validInput) || validInput < 0);
+
+                if (input == "") return;
+
+                var simpl = new RdpCurveSimplifier(_points, validInput);
                 PushState(new VisualizerScreenState(simpl));
             }
             else if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2)
             {
-                var simpl = new VisvalingamCurveSimplifier(_points, 1000);
+                var input = "1000";
+                var validInput = 0;
+
+                do
+                {
+                    const string text = "Enter a tolerance value below. This is used by the Vasvalingam algorithm as the epsilon.";
+                    input = Microsoft.VisualBasic.Interaction.InputBox(text, "Prompt", input);
+                    if (input == "") break;
+                } while (!int.TryParse(input, out validInput) || validInput < 0);
+
+                if (input == "") return;
+
+                var simpl = new VisvalingamCurveSimplifier(_points, validInput);
                 PushState(new VisualizerScreenState(simpl));
             }
             else if (e.KeyCode == Keys.D3 || e.KeyCode == Keys.NumPad3)
             {
-                var simpl = new ReumannWitkamCurveSimplifier(_points, 50f);
+                var input = "50";
+                var validInput = 0;
+
+                do
+                {
+                    const string text = "Enter a tolerance value below. This is used by the Reumann Witkam algorithm as the epsilon.";
+                    input = Microsoft.VisualBasic.Interaction.InputBox(text, "Prompt", input);
+                    if (input == "") break;
+                } while (!int.TryParse(input, out validInput) || validInput < 0);
+
+                if (input == "") return;
+
+                var simpl = new ReumannWitkamCurveSimplifier(_points, validInput);
                 PushState(new VisualizerScreenState(simpl));
             }
             else if (e.KeyCode == Keys.D4 || e.KeyCode == Keys.NumPad4)
             {
-                var simpl = new OpheimCurveSimplifier(_points, 50, 50);
+                var input = "50 50";
+                string input1 = "", input2 = "";
+                int validInput1 = 0, validInput2 = 0;
+
+                do
+                {
+                    const string text =
+                        "Enter two tolerance values below (separated by a space). " +
+                        "These are used by the Opheim algorithm as the perpendicular distance epsilon and the radial distance epsilon, respectively.";
+                    input = Microsoft.VisualBasic.Interaction.InputBox(text, "Prompt", input);
+                    if (input == "") break;
+
+                    var inputs = input.Split(' ');
+                    if (inputs.Length != 2) continue;
+
+                    input1 = inputs[0];
+                    input2 = inputs[1];
+                } while (!int.TryParse(input1, out validInput1) || !int.TryParse(input2, out validInput2) || validInput1 < 0 || validInput2 < 0);
+
+                if (input == "") return;
+
+                var simpl = new OpheimCurveSimplifier(_points, validInput1, validInput2);
                 PushState(new VisualizerScreenState(simpl));
             }
             else if (e.KeyCode == Keys.D5 || e.KeyCode == Keys.NumPad5)
             {
-                var simpl = new LangCurveSimplifier(_points, 250);
+                var input = "250";
+                var validInput = 0;
+
+                do
+                {
+                    const string text = "Enter a tolerance value below. This is used by the Lang algorithm as the epsilon.";
+                    input = Microsoft.VisualBasic.Interaction.InputBox(text, "Prompt", input);
+                    if (input == "") break;
+                } while (!int.TryParse(input, out validInput) || validInput < 0);
+
+                if (input == "") return;
+
+                var simpl = new LangCurveSimplifier(_points, validInput);
                 PushState(new VisualizerScreenState(simpl));
             }
         }
