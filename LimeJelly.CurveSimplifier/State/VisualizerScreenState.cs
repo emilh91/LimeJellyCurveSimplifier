@@ -57,6 +57,12 @@ namespace LimeJelly.CurveSimplifier.State
 
             var step = _steps[_currentStepIndex];
 
+            foreach (var circle in step.GetCircles())
+            {
+                var brush = rf.GetSolidColorBrush(circle.Item2);
+                renderTarget.FillEllipse(new Ellipse(circle.Item1, circle.Item3, circle.Item3), brush);
+            }
+
             foreach (var segment in step.GetSegments())
             {
                 var brush = rf.GetSolidColorBrush(segment.Item3);

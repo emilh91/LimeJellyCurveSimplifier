@@ -63,6 +63,11 @@ namespace LimeJelly.CurveSimplifier.Visualization
             }
         }
 
+        public virtual IEnumerable<Tuple<Vector2, Color, float>> GetCircles()
+        {
+            return Enumerable.Empty<Tuple<Vector2, Color, float>>();
+        }
+
         public virtual IEnumerable<Tuple<Vector2, Color, float>> GetPoints()
         {
             return _points;

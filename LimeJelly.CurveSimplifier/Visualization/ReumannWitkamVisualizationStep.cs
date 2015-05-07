@@ -26,9 +26,19 @@ namespace LimeJelly.CurveSimplifier.Visualization
         {
             // highlight epsilon
             yield return Highlight(_start, _end, Color.LightBlue, _tolerance * 2);
+            yield return Highlight(_start, _end, Color.Blue, 1f);
 
             foreach (var seg in base.GetSegments())
                 yield return seg;
+        }
+
+        public override IEnumerable<Tuple<Vector2, Color, float>> GetPoints()
+        {
+            foreach (var pt in base.GetPoints())
+                yield return pt;
+
+            yield return Point(_start, Color.Blue, 3f);
+            yield return Point(_end, Color.Blue, 3f);
         }
     }
 }
