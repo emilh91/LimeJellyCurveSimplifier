@@ -83,7 +83,7 @@ namespace LimeJelly.CurveSimplifier.State
             }
             else if (e.KeyCode == Keys.D4 || e.KeyCode == Keys.NumPad4)
             {
-                var input = "50 50";
+                var input = "20 50";
                 string input1 = "", input2 = "";
                 int validInput1 = 0, validInput2 = 0;
 
@@ -109,7 +109,7 @@ namespace LimeJelly.CurveSimplifier.State
             }
             else if (e.KeyCode == Keys.D5 || e.KeyCode == Keys.NumPad5)
             {
-                var input = "250";
+                var input = "20";
                 var validInput = 0;
 
                 do
