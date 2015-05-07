@@ -40,6 +40,9 @@ namespace LimeJelly.CurveSimplifier.Visualization
             if (_farthest.HasValue)
                 yield return Point(_farthest.Value, Color.Green, 10);
 
+            yield return Point(_start, Color.Blue, 3f);
+            yield return Point(_end, Color.Blue, 3f);
+
             foreach (var pt in base.GetPoints())
                 yield return pt;
 
