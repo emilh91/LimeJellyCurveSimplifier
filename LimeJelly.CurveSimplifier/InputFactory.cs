@@ -24,7 +24,21 @@ namespace LimeJelly.CurveSimplifier
             while (true)
             {
                 x = rand.NextFloat(x + 15, x + 30);
-                y = NormallyDistributedValue(rand, y, 75f);
+                y = MathUtil.Clamp(NormallyDistributedValue(rand, y, 75f), 100f, 500f);
+                yield return new Vector2(x, y);
+            }
+        }
+
+        public static IEnumerable<Vector2> ManyRandomPoints()
+        {
+            var rand = new Random();
+
+            var x = rand.NextFloat(0, 15);
+            var y = 300f;
+            while (true)
+            {
+                x = NormallyDistributedValue(rand, x + 1f, 10f);//rand.NextFloat(x + 15, x + 30);
+                y = MathUtil.Clamp(NormallyDistributedValue(rand, y, 25f), 100f, 500f);
                 yield return new Vector2(x, y);
             }
         }

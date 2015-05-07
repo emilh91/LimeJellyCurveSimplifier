@@ -16,6 +16,7 @@ namespace LimeJelly.CurveSimplifier.State
                 "[D]raw curve",
                 "[F]rom file",
                 "[R]andomly generate curve",
+                "[L]arge randomly generated curve",
                 "[A]bout",
             };
         }
@@ -48,6 +49,11 @@ namespace LimeJelly.CurveSimplifier.State
             else if (e.KeyCode == Keys.R)
             {
                 var points = InputFactory.RandomPoints().TakeWhile(p => p.X < 760);
+                PushState(new CurveDrawerScreenState(points));
+            }
+            else if (e.KeyCode == Keys.L)
+            {
+                var points = InputFactory.ManyRandomPoints().TakeWhile(p => p.X < 760);
                 PushState(new CurveDrawerScreenState(points));
             }
         }
