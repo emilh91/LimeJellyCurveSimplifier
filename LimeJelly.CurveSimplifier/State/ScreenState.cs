@@ -22,7 +22,7 @@ namespace LimeJelly.CurveSimplifier.State
             {
                 Reset();
             }
-            else if (e.KeyCode == Keys.Pause)
+            else if (e.KeyCode == Keys.Pause || e.KeyCode == Keys.P)
             {
                 if (IsPaused)
                 {
