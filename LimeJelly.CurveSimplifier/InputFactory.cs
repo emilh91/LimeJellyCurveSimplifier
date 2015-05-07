@@ -20,12 +20,23 @@ namespace LimeJelly.CurveSimplifier
             var rand = new Random();
 
             var x = rand.NextFloat(0, 15);
+            var y = 300f;
             while (true)
             {
                 x = rand.NextFloat(x + 15, x + 30);
-                var y = rand.NextFloat(100, 500);
+                y = NormallyDistributedValue(rand, y, 75f);
                 yield return new Vector2(x, y);
             }
+        }
+
+        public static float NormallyDistributedValue(Random rand, float mean, float stdist)
+        {
+            var result = -1f;
+            for(var i = 0; i < 6; ++i)
+            {
+                result += rand.NextFloat(0f, 1f/3f);
+            }
+            return (result * stdist) + mean;
         }
     }
 }
