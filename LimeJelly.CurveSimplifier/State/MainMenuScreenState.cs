@@ -14,6 +14,7 @@ namespace LimeJelly.CurveSimplifier.State
             _lines = new []
             {
                 "[D]raw curve",
+                "[F]rom file",
                 "[R]andomly generate curve",
                 "[A]bout",
             };
@@ -31,6 +32,19 @@ namespace LimeJelly.CurveSimplifier.State
             {
                 PushState(new CurveDrawerScreenState());
             }
+            else if (e.KeyCode == Keys.F)
+            {
+                var dlg = new OpenFileDialog();
+                dlg.Filter = "Text Files | *.txt";
+                dlg.DefaultExt = "txt";
+                dlg.FileOk += (sender, args) =>
+                {
+                    var points = InputFactory.PointsFromFile(dlg.FileName);
+                    PushState(new CurveDrawerScreenState(points));
+                };
+                dlg.ShowDialog();
+            }
+            
             else if (e.KeyCode == Keys.R)
             {
                 var points = InputFactory.RandomPoints().TakeWhile(p => p.X < 760);
