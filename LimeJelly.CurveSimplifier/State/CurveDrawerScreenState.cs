@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using LimeJelly.CurveSimplifier.Visualization;
 using SharpDX;
 using SharpDX.Direct2D1;
-using LimeJelly.CurveSimplifier.Simplification;
 
 namespace LimeJelly.CurveSimplifier.State
 {
@@ -21,7 +21,20 @@ namespace LimeJelly.CurveSimplifier.State
         {
             base.KeyUp(e);
 
-            if (e.KeyCode == Keys.V)
+            if (e.KeyCode == Keys.S)
+            {
+                var dlg = new SaveFileDialog();
+                dlg.Filter = "Text Files | *.txt";
+                dlg.DefaultExt = "txt";
+                dlg.FileName = "ljcs-" + DateTime.Now.ToString("yyyyMMdd-HHmmss");
+                dlg.FileOk += (sender, args) =>
+                {
+                    var data = _points.Select(p => string.Format("{0},{1}", p.X, p.Y));
+                    File.WriteAllLines(dlg.FileName, data);
+                };
+                dlg.ShowDialog();
+            }
+            else if (e.KeyCode == Keys.V)
             {
                 if (_points.Any())
                 {
