@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using SharpDX;
 
 namespace LimeJelly.CurveSimplifier
@@ -24,12 +22,6 @@ namespace LimeJelly.CurveSimplifier
             var xLength = end.X - start.X;
             return Math.Abs((yLength * point.X) - (xLength * point.Y) + (end.X * start.Y) - (end.Y * start.X))
                 / lineLength;
-        }
-
-        public static IEnumerable<T> Where<T>(this IEnumerable<T> source, Func<T, int, bool> selector)
-        {
-            var i = 0;
-            return source.Where(x => selector(x, i++));
         }
     }
 }
