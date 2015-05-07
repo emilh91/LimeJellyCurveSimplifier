@@ -47,7 +47,8 @@ namespace LimeJelly.CurveSimplifier.State
             }
             else if (e.KeyCode == Keys.D4 || e.KeyCode == Keys.NumPad4)
             {
-                // TODO Opheim
+                var simpl = new OpheimCurveSimplifier(_points, 50, 50);
+                PushState(new VisualizerScreenState(simpl));
             }
             else if (e.KeyCode == Keys.D5 || e.KeyCode == Keys.NumPad5)
             {

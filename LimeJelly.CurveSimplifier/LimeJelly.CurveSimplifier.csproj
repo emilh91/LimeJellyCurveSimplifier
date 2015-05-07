@@ -63,6 +63,7 @@
     <Compile Include="Simplification\LangCurveSimplifier.cs" />
     <Compile Include="Simplification\RdpCurveSimplifier.cs" />
     <Compile Include="Simplification\ReumannWitkamCurveSimplifier.cs" />
+    <Compile Include="Simplification\OpheimCurveSimplifier.cs" />
     <Compile Include="Simplification\VisvalingamCurveSimplifier.cs" />
     <Compile Include="State\AlgorithmMenuScreenState.cs" />
     <Compile Include="Visualization\BaseVisualizationStep.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visualization\OpheimVisualizationStep.cs" />
     <Compile Include="Visualization\ReumannWitkamVisualizationStep.cs" />
     <Compile Include="Visualization\VisvalingamVisualizationStep.cs" />
   </ItemGroup>
