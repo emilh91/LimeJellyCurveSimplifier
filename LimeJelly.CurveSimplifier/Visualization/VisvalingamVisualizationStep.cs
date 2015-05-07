@@ -13,13 +13,10 @@ namespace LimeJelly.CurveSimplifier.Visualization
         private Polygon _smallestTriangle;
 
         public VisvalingamVisualizationStep(IReadOnlyList<Vector2> curve, IEnumerable<Tuple<int, int>> solutionSegments, IEnumerable<int> solutionPoints,
-            int smallestTriangle)
+            Vector2 first, Vector2 middle, Vector2 last)
             : base(curve, solutionSegments, solutionPoints)
         {
-            _smallestTriangle = new Polygon(Color.Green,
-                Curve[smallestTriangle - 1],
-                Curve[smallestTriangle],
-                Curve[smallestTriangle + 1]);
+            _smallestTriangle = new Polygon(Color.Green, first, middle, last);
         }
 
         public override IEnumerable<Polygon> GetPolygons()

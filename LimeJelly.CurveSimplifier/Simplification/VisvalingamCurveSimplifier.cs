@@ -96,7 +96,8 @@ namespace LimeJelly.CurveSimplifier.Simplification
             if (smallest == null || smallest.Area > _maxAreaToRemove)
                 return new BaseVisualizationStep(Points, SolutionSegments, SolutionPoints);
 
-            return new VisvalingamVisualizationStep(Points, SolutionSegments, SolutionPoints, smallest.Index);
+            return new VisvalingamVisualizationStep(Points, SolutionSegments, SolutionPoints,
+                smallest.First, smallest.Middle, smallest.Last);
         }
 
 
