@@ -20,5 +20,11 @@ namespace LimeJelly.CurveSimplifier.Simplification
         /// Returns null once the solution has been found.
         /// </summary>
         IVisualizationStep NextStep();
+
+        /// <summary>
+        /// Returns the final solution.
+        /// </summary>
+        /// <returns></returns>
+        IVisualizationStep Solution();
     }
 }

@@ -106,5 +106,10 @@ namespace LimeJelly.CurveSimplifier.Simplification
         {
             return new BaseVisualizationStep(Points);
         }
+
+        public IVisualizationStep Solution()
+        {
+            return new BaseVisualizationStep(Points, SolutionSegments, SolutionPoints);
+        }
     }
 }

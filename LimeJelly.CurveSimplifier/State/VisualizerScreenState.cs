@@ -111,11 +111,18 @@ namespace LimeJelly.CurveSimplifier.State
         {
             if (_currentStepIndex == _steps.Count - 1)
             {
-                var nextStep = _simplifier.NextStep();
-                _visualizationFinished = nextStep == null;
                 if (!_visualizationFinished)
                 {
-                    _steps.Add(nextStep);
+                    var nextStep = _simplifier.NextStep();
+                    if (nextStep == null)
+                    {
+                        _visualizationFinished = true;
+                        _steps.Add(_simplifier.Solution());
+                    }
+                    else
+                    {
+                        _steps.Add(nextStep);
+                    }
                     _currentStepIndex++;
                 }
             }
